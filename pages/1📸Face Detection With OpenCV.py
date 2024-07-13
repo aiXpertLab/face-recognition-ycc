@@ -1,6 +1,6 @@
 import streamlit as st
-from app.utils import streamlit_components
-streamlit_components.streamlit_ui('🦣 PostgreSQL')
+from utils import streamlit_components
+streamlit_components.streamlit_ui('🦣 Face Detection With OpenCV')
 # -------------------------------------------------------------------------------------
 from cv2 import (
     imread,

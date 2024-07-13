@@ -1,6 +1,6 @@
 import streamlit as st
 
-from app.utils import streamlit_components, streamlit_docs
+from utils import streamlit_components, streamlit_docs
 streamlit_components.streamlit_ui('🐬🦣 Face Recognition 🍃🦭')
 # ----------------------------------------------------------------------
 t1,t2=st.tabs(['General','MTCNN'])
