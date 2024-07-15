@@ -1,2 +1,10 @@
-streamlit
+streamlit: 1.10.0
 streamlit_extras
+
+#Python: 3.6.8
+tensorflow: 1.13.1
+keras: 2.2.4
+protobuf==3.19.6
+
+
+opencv-python
