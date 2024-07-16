@@ -11,7 +11,7 @@ from cv2 import (
     rectangle,
 )
 
-pixels = imread('./images/test2.jpg')# load the photograph
+pixels = imread('./pages/img/test2.jpg')# load the photograph
 classifier = CascadeClassifier('./models/haarcascade_frontalface_default.xml')# load the pre-trained model
 
 # perform face detection
