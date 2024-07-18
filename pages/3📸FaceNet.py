@@ -9,16 +9,20 @@ from os import listdir
 import matplotlib.pyplot as plt
 import numpy as np
 
+YCC = './data/train/ycc/'
+TRAIN = './data/train/'
+VAL = '/data/val/'
+
 with t1: 
     if button("1. extract face", key="button1"):
 
-        folder = './pages/data/train/ben_afflek/'
+        folder = YCC
         i = 1
         cols = st.columns(7)
         # enumerate files
         for filename in listdir(folder):
             path = folder + filename
-            face = fp.extract_a_face(path)
+            face = fp.extract_face(path)
             print(i, face.shape)
             # plot
             with cols[(i - 1) % 7]:
@@ -32,12 +36,12 @@ with t1:
 
 with t2:
     if button("2.Save Datasize", key="button2"):
-        trainX, trainy = fp.load_dataset('./pages/data/train/')
+        trainX, trainy = fp.load_dataset(TRAIN)
         print(trainX.shape, trainy.shape)
         # load test dataset
-        testX, testy = fp.load_dataset('./pages/data/val/')
+        testX, testy = fp.load_dataset(VAL)
         # save arrays to one file in compressed format
-        np.savez_compressed('5-celebrity-faces-dataset.npz', trainX, trainy, testX, testy)
+        np.savez_compressed('ycc-wxy-syz-faces-dataset.npz', trainX, trainy, testX, testy)
 
 with t3:
     if button("embeddings", key="button3"):
