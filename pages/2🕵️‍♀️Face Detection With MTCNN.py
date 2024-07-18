@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_extras.stateful_button import button
 from utils import streamlit_components, image_processing as ip
 streamlit_components.streamlit_ui('🦣 Face Detection With MTCNN')
 # -------------------------------------------------------------------------------------
@@ -13,17 +14,17 @@ if gpus:
     for gpu in gpus:
         tf.config.experimental.set_memory_growth(gpu, True)
 
-directory = './data/images/'
+directory = os.getenv('DATA_IMAGES')
 
-for filename in os.listdir(directory):
-    
-    path = directory + filename
-    
-    st.write(path)
+if button("Continue?", key="butt2"):
+    for filename in os.listdir(directory):
+        
+        path = directory + filename
+        st.text(path)
 
-    pixels = pyplot.imread(path)# load the photograph
-    detector = MTCNN()
+        pixels = pyplot.imread(path)# load the photograph
+        detector = MTCNN()
 
-    faces = detector.detect_faces(pixels)
+        faces = detector.detect_faces(pixels)
 
-    ip.draw_image_with_boxes(filename=path, result_list=faces)
+        ip.draw_image_with_boxes(filename=path, result_list=faces)

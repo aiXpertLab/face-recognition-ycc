@@ -1,5 +1,6 @@
 streamlit: 1.10.0
 streamlit_extras
+python-dotenv
 
 #Python: 3.6.8
 tensorflow: 1.13.1

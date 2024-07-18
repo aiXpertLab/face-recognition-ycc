@@ -1,71 +1,27 @@
-import streamlit as st
+import streamlit as st, os
 from streamlit_extras.stateful_button import button
-from utils import face_pipline as fp, streamlit_components
-streamlit_components.streamlit_ui('🦣 Face Detection With MTCNN')
-t1,t2,t3,t4,t5,t6,t7 = st.tabs(["Extract Faces","Save Dataset","Embeddings","Face Classification","5","6MTCNN Detect","7Load Model"])
-# -------------------------------------------------------------------------------------
-import tensorflow as tf
-from os import listdir
-import matplotlib.pyplot as plt
-import numpy as np
+from utils import streamlit_components, face_pipline, image_processing 
 
-YCC = './data/train/ycc/'
-TRAIN = './data/train/'
-VAL = '/data/val/'
+FACENET_MODEL   = os.getenv('FACENET_MODEL')
+DATASIZE_NAME   = os.getenv('DATASIZE_NAME')
+EMBEDDINGS_NAME = os.getenv('EMBEDDINGS_NAME')
 
-with t1: 
-    if button("1. extract face", key="button1"):
+streamlit_components.streamlit_ui('🦣 Classification with FaceNet')
+t1,t2,t3,t4 = st.tabs(["Face Classification", "Extract Faces","Save Dataset","Embeddings",])
 
-        folder = YCC
-        i = 1
-        cols = st.columns(7)
-        # enumerate files
-        for filename in listdir(folder):
-            path = folder + filename
-            face = fp.extract_face(path)
-            print(i, face.shape)
-            # plot
-            with cols[(i - 1) % 7]:
-                fig, ax = plt.subplots()
-                ax.axis('off')
-                ax.imshow(face)
-                st.pyplot(fig)
-            i += 1
-            if i % 7 == 1:
-                cols = st.columns(7)
-
-with t2:
-    if button("2.Save Datasize", key="button2"):
-        trainX, trainy = fp.load_dataset(TRAIN)
-        print(trainX.shape, trainy.shape)
-        # load test dataset
-        testX, testy = fp.load_dataset(VAL)
-        # save arrays to one file in compressed format
-        np.savez_compressed('ycc-wxy-syz-faces-dataset.npz', trainX, trainy, testX, testy)
+with t2: 
+    if button("Extract Face", key="button1"):
+        image_processing.show_extracted_faces(os.getenv('YCC'))
 
 with t3:
-    if button("embeddings", key="button3"):
-        data = np.load('5-celebrity-faces-dataset.npz')
-        trainX, trainy, testX, testy = data['arr_0'], data['arr_1'], data['arr_2'], data['arr_3']
-        st.write('Loaded: ', trainX.shape, trainy.shape, testX.shape, testy.shape)
-        model = tf.keras.models.load_model('./models/facenet_keras_2024.h5')
-        # convert each face in the train set to an embedding
-        newTrainX = list()
-        for face_pixels in trainX:
-            embedding = fp.get_embedding(model, face_pixels)
-            newTrainX.append(embedding)
-        newTrainX = np.asarray(newTrainX)
-        print(newTrainX.shape)
-        # convert each face in the test set to an embedding
-        newTestX = list()
-        for face_pixels in testX:
-            embedding = fp.get_embedding(model, face_pixels)
-            newTestX.append(embedding)
-        newTestX = np.asarray(newTestX)
-        print(newTestX.shape)
-        # save arrays to one file in compressed format
-        np.savez_compressed('5-celebrity-faces-embeddings.npz', newTrainX, trainy, newTestX, testy)
-        
+    if button("Save Datasize", key="button2"):
+        face_pipline.save_datasize(DATASIZE_NAME, os.getenv('TRAIN'), os.getenv('VAL'))
+
 with t4:
-    if button("SVM", key="button4"): fp.svc()
+    if button("Save Embeddings", key="button3"):
+        face_pipline.save_embeddings(FACENET_MODEL, EMBEDDINGS_NAME, DATASIZE_NAME)
+        
+with t1:
+    if button("SVM", key="button4"): 
+        face_pipline.svc(DATASIZE_NAME, EMBEDDINGS_NAME)
         

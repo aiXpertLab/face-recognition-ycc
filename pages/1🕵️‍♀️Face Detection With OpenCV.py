@@ -1,5 +1,7 @@
-import streamlit as st
+import streamlit as st,os
 from utils import streamlit_components
+from streamlit_extras.stateful_button import button
+
 streamlit_components.streamlit_ui('🦣 Face Detection With OpenCV')
 # -------------------------------------------------------------------------------------
 from cv2 import (
@@ -10,21 +12,24 @@ from cv2 import (
     CascadeClassifier,
     rectangle,
 )
+st.write(os.getenv('YCC'))
 
-pixels = imread('./data/images/test2.jpg')# load the photograph
-classifier = CascadeClassifier('./models/haarcascade_frontalface_default.xml')# load the pre-trained model
+if button("Show Picture?", key="but1"):
 
-# perform face detection
-bboxes = classifier.detectMultiScale(pixels,1.1,3)      #scaleFactor and minNeighbors
+    pixels = imread('./data/images/m2.jpg')# load the photograph
+    classifier = CascadeClassifier('./models/haarcascade_frontalface_default.xml')# load the pre-trained model
 
-for box in bboxes:
-    st.info(box)    # print bounding box for each detected face
-   
-    x, y, width, height = box   # extract
-    x2, y2 = x + width, y + height
+    # perform face detection
+    bboxes = classifier.detectMultiScale(pixels,1.1,3)      #scaleFactor and minNeighbors
+
+    for box in bboxes:
+        st.info(box)    # print bounding box for each detected face
     
-    rectangle(pixels, (x, y), (x2, y2), (0, 0, 255), 1) # draw a rectangle over the pixels
+        x, y, width, height = box   # extract
+        x2, y2 = x + width, y + height
+        
+        rectangle(pixels, (x, y), (x2, y2), (0, 0, 255), 1) # draw a rectangle over the pixels
 
-imshow('face detection', pixels)    # show the image
-waitKey(2000)  # keep the window open until we press a key
-destroyAllWindows() # close the window
+    imshow('face detection', pixels)    # show the image
+    waitKey(6800)  # keep the window open until we press a key
+    destroyAllWindows() # close the window
