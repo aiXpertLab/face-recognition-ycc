@@ -4,6 +4,18 @@
 http://arxiv.org/abs/1602.07261
 https://github.com/davidsandberg/facenet/blob/master/src/models/inception_resnet_v1.py
 https://github.com/myutwo150/keras-inception-resnet-v2/blob/master/inception_resnet_v2.py
+
+
+# #Step 1
+# from utils import inception_resnet_v1
+
+# #Step 2
+# model = inception_resnet_v1.InceptionResNetV1()
+# model.load_weights('./models/facenet_keras_weights.h5')
+
+# model.save('./models/facenet_complete_model_leo.h5')
+
+
 """
 from functools import partial
 import tensorflow as tf
